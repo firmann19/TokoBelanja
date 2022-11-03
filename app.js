@@ -1,4 +1,5 @@
 const userRoute = require("./routers/userRoute");
+const categoryRoute = require("./routers/categoryRoute");
 const port = 7000;
 const express = require("express");
 const app = express();
@@ -11,6 +12,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(userRoute);
+app.use(categoryRoute);
 
 app.listen(port, () => {
   console.log(`Server berjalan di PORT ${port}`);

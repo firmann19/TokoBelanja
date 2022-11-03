@@ -49,6 +49,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Category",
+      hooks: {
+        beforeValidate: (cat, opt) => {
+          if (opt.type !== "BULKUPDATE") {
+            cat.sold_product_amount = 0;
+          }
+        },
+      }
     }
   );
   return Category;

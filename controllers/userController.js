@@ -14,7 +14,7 @@ class UserController {
       gender,
     })
       .then((result) => {
-        let responseBody = {
+        let response = {
           user: {
             id: result.id,
             full_name,
@@ -24,9 +24,10 @@ class UserController {
             createdAt: result.createdAt,
           },
         };
-        res.status(201).json(responseBody);
+        res.status(201).json(response);
       })
       .catch((err) => {
+        console.log(err)
         if (err instanceof ValidationError == false) {
           res.status(500).json({
             error: true,
@@ -162,27 +163,26 @@ class UserController {
     })
 
       .then((result) => {
-        let newBalance = parseInt(result.balance) + parseInt(balance);
+        let newBalance = parseInt(result.balance)+parseInt(balance);
 
         User.update(
           {
             balance: newBalance,
           },
           {
-            wehere: {
+            where: {
               id: userData.id,
             },
             returning: true,
           }
         )
           .then((result) => {
-            return res
-              .status(200)
-              .json({
-                message: `Your balance has been successfully updated to Rp ${result[1][0].balance}`,
-              });
+            return res.status(200).json({
+              message: `Your balance has been successfully updated to Rp ${result[1][0].balance}`,
+            });
           })
           .catch((err) => {
+            console.log(err)
             if (err instanceof ValidationError == false) {
               res.status(500).json({
                 error: true,

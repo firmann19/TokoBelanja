@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
           },
           len: {
             args: [6, 10],
-            msg: "password min 6 character & maximal 10 character",
+            msg: "password min 6 char & max 10 char",
           },
         },
       },
@@ -91,7 +91,7 @@ module.exports = (sequelize, DataTypes) => {
           },
           isIn: {
             args: [[0, 1]],
-            msg: "role must be admin or customer",
+            msg: "role must be 0 or 1",
           },
         },
       },
@@ -132,8 +132,7 @@ module.exports = (sequelize, DataTypes) => {
           }
         },
         beforeCreate: (user, opt) => {
-          const hashedPassword = hashPassword(user.password);
-          user.password = hashedPassword;
+          user.password = hashPassword(user.password);
         },
         afterCreate: (user, opt) => {
           user.balance = "Rp " + user.balance;
