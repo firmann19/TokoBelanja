@@ -27,7 +27,6 @@ class UserController {
         res.status(201).json(response);
       })
       .catch((err) => {
-        console.log(err)
         if (err instanceof ValidationError == false) {
           res.status(500).json({
             error: true,
