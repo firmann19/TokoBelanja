@@ -10,7 +10,7 @@ router.use(authentication);
 
 router.patch("/users/topup", UserController.topup);
 
-router.use(authorization)
+router.use('/users/:id', authorization)
 
 router.put("/users/:id", UserController.update);
 router.delete("/users/:id", UserController.delete);

@@ -1,24 +1,23 @@
 const { User } = require("../models");
 
 function authorization(req, res, next) {
-  let UserId = req.params.id || 0;
   let authenticatedUser = res.locals.user;
 
   User.findOne({
     where: {
-      id: UserId,
+      id: authenticatedUser.id,
     },
   })
 
-    .then((user) => {
-      if (!user) {
+    .then((result) => {
+      if (result == null) {
         return res.status(404).json({
-          name: "User Not Found",
+          name: "Data Not Found",
           message: "access denied",
         });
       }
 
-      if (user.id == authenticatedUser.id) {
+      if (result.role == 0) {
         return next();
       } else {
         return res.status(403).json({
@@ -28,7 +27,7 @@ function authorization(req, res, next) {
       }
     })
     .catch((err) => {
-      return res.status(403).json(err);
+      return res.status(500).json(err);
     });
 }
 

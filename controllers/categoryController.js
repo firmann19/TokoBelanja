@@ -1,9 +1,9 @@
-const {ValidationError} = require('sequelize')
+const { ValidationError } = require("sequelize");
 const { Category, Product } = require("../models");
 
 class CategoryController {
   //create
-  static createCategory() {
+  static createCategory(req,res) {
     let { type } = req.body;
 
     Category.create({
@@ -11,15 +11,18 @@ class CategoryController {
     })
       .then((result) => {
         let response = {
-          id: result.id,
-          type,
-          updatedAt: result.updatedAt,
-          createdAt: result.createdAt,
-          sold_product_amount: result.sold_product_amount,
+          category: {
+            id: result.id,
+            type,
+            updatedAt: result.updatedAt,
+            createdAt: result.createdAt,
+            sold_product_amount: result.sold_product_amount,
+          },
         };
         return res.status(201).json(response);
       })
       .catch((err) => {
+        console.log(err)
         if (err instanceof ValidationError == false) {
           res.status(500).json({
             error: true,

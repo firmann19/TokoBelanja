@@ -16,7 +16,7 @@ function authentication(req, res, next) {
         if (!result) {
           return res.status(401).json({
             name: "Authentication Error",
-            Message: "",
+            Message: "access denied",
           });
         }
         res.locals.user = result;
