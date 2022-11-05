@@ -3,7 +3,7 @@ const { Category, Product } = require("../models");
 
 class CategoryController {
   //create
-  static createCategory(req,res) {
+  static createCategory(req, res) {
     let { type } = req.body;
 
     Category.create({
@@ -22,7 +22,7 @@ class CategoryController {
         return res.status(201).json(response);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         if (err instanceof ValidationError == false) {
           res.status(500).json({
             error: true,
@@ -63,7 +63,7 @@ class CategoryController {
     })
       .then((result) => {
         return res.status(200).json({
-          categories: result.categories,
+          categories: result,
         });
       })
       .catch((err) => {
@@ -124,6 +124,11 @@ class CategoryController {
         id: req.params.id,
       },
     }).then((result) => {
+      if (result == 0) {
+        return res
+          .status(404)
+          .json({ message: `categori with id(${req.params.id}) is not found` });
+      }
       return res
         .status(200)
         .json({ message: "Your category has been successfully deleted" })

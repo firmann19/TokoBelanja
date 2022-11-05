@@ -10,7 +10,7 @@ function authorization(req, res, next) {
   })
 
     .then((result) => {
-      if (result == null) {
+      if (!result) {
         return res.status(404).json({
           name: "Data Not Found",
           message: "access denied",
