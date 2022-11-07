@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.User)
-      this.belongsTo(models.Product)
+      this.belongsTo(models.User);
+      this.belongsTo(models.Product);
     }
   }
   TransactionHistory.init(
@@ -77,12 +77,66 @@ module.exports = (sequelize, DataTypes) => {
             value: true,
             msg: "type of total_price must number",
           },
+          async BalanceCheck(value) {
+            let total = value != 0 ? value : null;
+
+            if (total != null) {
+              const [results] = await sequelize.query(
+                `SELECT * FROM public."Users" WHERE id = ${this.UserId}`
+              );
+
+              if (results.length != 0) {
+                if (total > results[0]["balance"]) {
+                  throw new Error(
+                    `not enough balance, Rp ${results[0]["balance"]} available`
+                  );
+                }
+              }
+            }
+          },
         },
       },
     },
     {
       sequelize,
       modelName: "TransactionHistory",
+      hooks: {
+        beforeValidate: async (trans, opt) => {
+          if (opt.type !== "BULKUPDATE") {
+            const [results] = await sequelize.query(
+              `SELECT * FROM public."Products" WHERE id = ${
+                trans.ProductId ? trans.ProductId : null
+              }`
+            );
+
+            if (results.length != 0) {
+              trans.total_price = trans.quantity * results[0].price;
+            } else {
+              trans.total_price = 0;
+            }
+          }
+        },
+        afterCreate: async (trans, opt) => {
+          if (opt.type !== "BULKUPDATE") {
+            await sequelize.query(
+              `UPDATE public."Products" SET stock = stock-${trans.quantity} WHERE id = ${trans.ProductId}`
+            );
+            await sequelize.query(
+              `UPDATE public."Users" SET balance = balance-${trans.total_price} WHERE id = ${trans.UserId}`
+            );
+
+            const [results] = await sequelize.query(
+              `SELECT * FROM public."Products" WHERE id = ${trans.ProductId}`
+            );
+            await sequelize.query(
+              `UPDATE public."Categories" SET sold_product_amount = sold_product_amount+${trans.quantity} WHERE id = ${results[0].CategoryId}`
+            );
+
+            // modify price
+            trans.total_price = "Rp " + trans.total_price;
+          }
+        },
+      },
     }
   );
   return TransactionHistory;

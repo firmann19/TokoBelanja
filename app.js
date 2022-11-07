@@ -1,6 +1,7 @@
 const userRoute = require("./routers/userRoute");
 const productRoute = require("./routers/productRoute");
 const categoryRoute = require("./routers/categoryRoute");
+const transactionRoute = require("./routers/transactionRoute");
 const port = 7000;
 const express = require("express");
 const app = express();
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 
 app.use(userRoute);
 app.use(categoryRoute);
+app.use(transactionRoute);
 app.use(productRoute);
 
 app.listen(port, () => {
