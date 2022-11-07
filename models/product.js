@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Category)
+      this.belongsTo(models.Category);
     }
   }
   Product.init(
@@ -94,6 +94,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Product",
+      hooks: {
+        afterCreate: (prod, opt) => {
+          prod.price = "Rp " + prod.price;
+        },
+      },
     }
   );
   return Product;

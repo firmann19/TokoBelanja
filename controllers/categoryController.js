@@ -132,9 +132,9 @@ class CategoryController {
       return res
         .status(200)
         .json({ message: "Your category has been successfully deleted" })
-        .catch((err) => {
-          res.status(500).json(err);
-        });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
     });
   }
 }
