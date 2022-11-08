@@ -74,6 +74,7 @@ class TransactionController {
         });
       })
       .catch((err) => {
+        console.log(err)
         return res.status(500).json({
           error: true,
           message: err,
@@ -107,6 +108,7 @@ class TransactionController {
         });
       })
       .catch((err) => {
+        console.log(err)
         return res.status(500).json({
           error: true,
           message: err,
@@ -120,9 +122,9 @@ class TransactionController {
 
     TransactionHistory.findOne({
       where: {
-        id: transactionId.id,
+        id: transactionId,
       },
-      inclode: [
+      include: [
         {
           model: Product,
           attributes: ["id", "title", "price", "stock", "CategoryId"],
@@ -136,6 +138,7 @@ class TransactionController {
         return res.status(200).json(result);
       })
       .catch((err) => {
+        console.log(err)
         return res.status(500).json({
           error: true,
           message: err,

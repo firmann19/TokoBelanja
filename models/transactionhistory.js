@@ -27,6 +27,18 @@ module.exports = (sequelize, DataTypes) => {
             args: true,
             msg: "ProductId is required",
           },
+          async WrongProductId(value) {
+            let id = value ? value : null;
+
+            if (id != null) {
+              const [results] = await sequelize.query(
+                `SELECT * FROM public."Products" WHERE id = ${id}`
+              );
+              if (results.length == 0) {
+                throw new Error(`ProductId ${value} is not exist`);
+              }
+            }
+          },
         },
       },
       UserId: {
@@ -58,6 +70,23 @@ module.exports = (sequelize, DataTypes) => {
           isNumeric: {
             value: true,
             msg: "type of quantity must number",
+          },
+          async QuantityCheck(value) {
+            let quantity = value ? value : null;
+
+            if (quantity != null) {
+              const [results] = await sequelize.query(
+                `SELECT * FROM public."Products" WHERE id = ${this.ProductId}`
+              );
+
+              if (results.length != 0) {
+                if (quantity > results[0]["stock"]) {
+                  throw new Error(
+                    `not enough stock, ${results[0]["stock"]} pieces available`
+                  );
+                }
+              }
+            }
           },
         },
       },

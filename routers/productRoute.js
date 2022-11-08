@@ -1,11 +1,11 @@
 const ProductController = require("../controllers/productController");
-const authorization = require("../middlewares/adminAuthorization");
+const AdminAuthorization = require("../middlewares/adminAuthorization");
 const authentication = require("../middlewares/authentication");
 
 const router = require("express").Router();
 
 router.use(authentication);
-router.use("/products", authorization);
+router.use("/products", AdminAuthorization);
 
 router.get("/products", ProductController.getProduct);
 router.post("/products", ProductController.createProduct);

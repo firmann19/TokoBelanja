@@ -1,6 +1,6 @@
 const { User } = require("../models");
 
-function authorization(req, res, next) {
+function AdminAuthorization(req, res, next) {
   let authenticatedUser = res.locals.user;
 
   User.findOne({
@@ -8,7 +8,6 @@ function authorization(req, res, next) {
       id: authenticatedUser.id,
     },
   })
-
     .then((result) => {
       if (!result) {
         return res.status(404).json({
@@ -31,4 +30,4 @@ function authorization(req, res, next) {
     });
 }
 
-module.exports = authorization;
+module.exports = AdminAuthorization;

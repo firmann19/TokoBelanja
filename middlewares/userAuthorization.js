@@ -1,6 +1,6 @@
 const { User } = require("../models");
 
-function authorization(req, res, next) {
+function UserAuthorization(req, res, next) {
   let UserId = req.params.id || 0;
   const authenticatedUser = res.locals.user;
 
@@ -30,4 +30,4 @@ function authorization(req, res, next) {
     });
 }
 
-module.exports = authorization;
+module.exports = UserAuthorization;
